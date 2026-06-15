@@ -1,0 +1,83 @@
+<Project>
+  <Name>WebChamados</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>Classes</Name>
+    <Language>Java</Language>
+    <Entities>
+      <Entity type="Class">
+        <Name>Chamado</Name>
+        <Access>Public</Access>
+        <Location left="323" top="88" />
+        <Size width="183" height="230" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private Integer id</Member>
+        <Member type="Field">private String titulo</Member>
+        <Member type="Field">private String descricao</Member>
+        <Member type="Field">private Prioridade prioridade</Member>
+        <Member type="Field">private ChamadoStatus status</Member>
+        <Member type="Field">private Responsavel responsavel</Member>
+        <Member type="Field">private LocalDateTime dataAbertura</Member>
+        <Member type="Field">private LocalDateTime dataAtualizacao</Member>
+        <Member type="Constructor">public Chamado()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Enum">
+        <Name>Prioridade</Name>
+        <Access>Public</Access>
+        <Location left="658" top="50" />
+        <Size width="163" height="112" />
+        <Collapsed>False</Collapsed>
+        <Value>BAIXA</Value>
+        <Value>MEDIA</Value>
+        <Value>ALTA</Value>
+      </Entity>
+      <Entity type="Enum">
+        <Name>ChamadoStatus</Name>
+        <Access>Public</Access>
+        <Location left="658" top="207" />
+        <Size width="163" height="129" />
+        <Collapsed>False</Collapsed>
+        <Value>ABERTO</Value>
+        <Value>EM_ANDAMENTO</Value>
+        <Value>RESOLVIDO</Value>
+        <Value>FECHADO</Value>
+      </Entity>
+      <Entity type="Class">
+        <Name>Responsavel</Name>
+        <Access>Public</Access>
+        <Location left="323" top="381" />
+        <Size width="163" height="145" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private Integer id</Member>
+        <Member type="Field">private String nome</Member>
+        <Member type="Field">private String email</Member>
+        <Member type="Constructor">public Responsavel()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Association" first="0" second="1">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="0" second="2">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="0" second="3">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>0..*</EndMultiplicity>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>
