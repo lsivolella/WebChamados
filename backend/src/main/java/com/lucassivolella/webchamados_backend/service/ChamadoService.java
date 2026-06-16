@@ -23,7 +23,7 @@ public class ChamadoService {
     private final ChamadoRepository chamadoRepository;
     private final ResponsavelRepository responsavelRepository;
 
-    private ChamadoService(
+    public ChamadoService(
             ChamadoRepository chamadoRepository,
             ResponsavelRepository responsavelRepository) {
         this.chamadoRepository = chamadoRepository;
