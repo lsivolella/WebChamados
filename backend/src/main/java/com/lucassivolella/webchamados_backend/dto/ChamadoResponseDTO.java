@@ -13,5 +13,9 @@ public record ChamadoResponseDTO(
 
         Integer responsavelId,
 
-        String responsavelNome) {
+        String responsavelNome,
+
+        String dataAbertura,
+
+        String dataAtualizacao) {
 }

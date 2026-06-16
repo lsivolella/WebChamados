@@ -13,7 +13,6 @@ import com.lucassivolella.webchamados_backend.entity.Responsavel;
 import com.lucassivolella.webchamados_backend.enums.ChamadoStatus;
 import com.lucassivolella.webchamados_backend.enums.Prioridade;
 import com.lucassivolella.webchamados_backend.repository.ChamadoRepository;
-import com.lucassivolella.webchamados_backend.repository.ResponsavelRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -21,18 +20,24 @@ import jakarta.transaction.Transactional;
 public class ChamadoService {
 
     private final ChamadoRepository chamadoRepository;
-    private final ResponsavelRepository responsavelRepository;
+    private final ResponsavelService responsavelService;
 
     public ChamadoService(
             ChamadoRepository chamadoRepository,
-            ResponsavelRepository responsavelRepository) {
+            ResponsavelService responsavelService) {
         this.chamadoRepository = chamadoRepository;
-        this.responsavelRepository = responsavelRepository;
+        this.responsavelService = responsavelService;
     }
 
     @Transactional
     public ChamadoResponseDTO criar(ChamadoRequestDTO dto) {
-        Responsavel responsavel = getResponsavel(dto.responsavelId());
+        Responsavel responsavel;
+
+        if (Boolean.TRUE.equals(dto.atribuicaoAutomatica())) {
+            responsavel = responsavelService.buscarComMenosChamadosAbertos();
+        } else {
+            responsavel = getResponsavel(dto.responsavelId());
+        }
 
         Chamado chamado = criarChamado(dto, responsavel);
 
@@ -43,7 +48,12 @@ public class ChamadoService {
     public ChamadoResponseDTO atualizar(Integer id, ChamadoRequestDTO dto) {
         Chamado chamado = getChamado(id);
 
-        Responsavel responsavel = getResponsavel(dto.responsavelId());
+        Responsavel responsavel;
+        if (Boolean.TRUE.equals(dto.atribuicaoAutomatica())) {
+            responsavel = responsavelService.buscarComMenosChamadosAbertos();
+        } else {
+            responsavel = getResponsavel(dto.responsavelId());
+        }
 
         atualizarChamado(dto, chamado, responsavel);
 
@@ -80,9 +90,7 @@ public class ChamadoService {
     }
 
     private Responsavel getResponsavel(Integer id) {
-        return responsavelRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Responsavel não encontrado."));
+        return responsavelService.buscarEntidadePorId(id);
     }
 
     private Chamado criarChamado(ChamadoRequestDTO dto, Responsavel responsavel) {
@@ -125,10 +133,12 @@ public class ChamadoService {
                 chamado.getId(),
                 chamado.getTitulo(),
                 chamado.getDescricao(),
-                chamado.getPrioridade().getDescricao(),
-                chamado.getStatus().getDescricao(),
+                chamado.getPrioridade().name(),
+                chamado.getStatus().name(),
                 chamado.getResponsavel().getId(),
-                chamado.getResponsavel().getNome());
+                chamado.getResponsavel().getNome(),
+                chamado.getDataAbertura().toString(),
+                chamado.getDataAtualizacao().toString());
     }
     // //#endregion
 }

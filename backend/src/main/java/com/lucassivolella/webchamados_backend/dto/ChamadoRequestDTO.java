@@ -11,8 +11,8 @@ public record ChamadoRequestDTO(
 
         @NotNull String status,
 
-        @NotNull Integer responsavelId,
+        Integer responsavelId,
 
-        @NotNull String responsavelNome) {
+        Boolean atribuicaoAutomatica) {
 
 }

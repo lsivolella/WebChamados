@@ -33,6 +33,12 @@ public class ResponsavelService {
         return toResponseDTO(responsavel);
     }
 
+    public Responsavel buscarEntidadePorId(Integer id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Responsável não encontrado."));
+    }
+
     public List<ResponsavelResponseDTO> listar() {
         return repository.findAll()
                 .stream()
