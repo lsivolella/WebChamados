@@ -64,6 +64,13 @@ CREATE USER webchamados WITH PASSWORD 'sua_senha';
 GRANT ALL PRIVILEGES ON DATABASE chamados_db TO webchamados;
 ```
 
+Conecte-se ao banco criado e conceda permissões no schema:
+
+```sql
+\c chamados_db
+GRANT ALL ON SCHEMA public TO webchamados;
+```
+
 Saia do psql com `\q`.
 
 ### 3. Configure as variáveis do backend
@@ -103,7 +110,26 @@ A aplicação estará disponível em `http://localhost:5173`.
 
 ## Decisões arquiteturais
 
-<!-- TODO: preencher conforme o projeto avançar -->
+### Soft delete no fechamento de chamados
+O endpoint `DELETE /chamados/{id}` não remove o registro do banco — ele altera o status do chamado para `FECHADO`. Essa abordagem preserva o histórico de chamados e permite auditoria futura. Em um sistema real, isso também evita quebrar referências em relatórios ou integrações.
+
+### Separação entre RequestDTO e ResponseDTO
+Cada entidade possui DTOs distintos para entrada e saída de dados. Isso evita expor campos internos desnecessariamente e permite que os contratos de entrada e saída evoluam de forma independente.
+
+### Enums com descrição separada
+Os enums `Prioridade` e `ChamadoStatus` armazenam um campo `descricao` com o label legível em português. No entanto, a API retorna o nome técnico do enum (`ABERTO`, `ALTA`) para garantir consistência na comunicação com o frontend, que é responsável por mapear os valores para exibição.
+
+### Atribuição automática de responsável
+Ao criar ou editar um chamado, o usuário pode optar pela atribuição automática. Nesse caso, o sistema seleciona o responsável com menos chamados com status `ABERTO` ou `EM_ANDAMENTO` — considerados "em aberto". Chamados com status `RESOLVIDO` ou `FECHADO` não entram na contagem.
+
+### Entidade Responsavel simplificada
+A entidade `Responsavel` foi mantida simples (nome e email) para o escopo do desafio. Em um sistema real, ela seria uma especialização ou papel atribuído a uma entidade `Funcionario`, que poderia também representar quem abre os chamados.
+
+### Flyway para controle de schema
+As migrações de banco de dados são gerenciadas pelo Flyway, garantindo que o schema seja criado e populado automaticamente na inicialização. O Hibernate está configurado com `ddl-auto=none`, delegando inteiramente o controle do schema ao Flyway.
+
+### Versão do Spring Boot
+O projeto utiliza Spring Boot 3.5.0. A versão 4.x foi descartada por incompatibilidades com o Flyway e outras dependências ainda não adaptadas para essa versão.
 
 ## Referências e bibliotecas externas
 
